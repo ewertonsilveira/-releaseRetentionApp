@@ -3,7 +3,7 @@ import { IRelease } from './IReleases.d';
 /**
  * Class to encapsulate and manipulate the releases retention rules
  */
-class RetentionRule {
+class Retention {
   releases: IRelease[];
 
   constructor(releasesData: IRelease[]) {
@@ -18,7 +18,7 @@ class RetentionRule {
    * @param {number=} keep - A number releases to keep.
    * @returns {IReleases[]}
    */
-  releasesToKeep(
+  applyKeepRule(
     projectId: string,
     environmentId: string,
     keep: number,
@@ -39,4 +39,4 @@ class RetentionRule {
   }
 }
 
-export default RetentionRule;
+export default Retention;

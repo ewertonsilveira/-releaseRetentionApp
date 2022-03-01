@@ -6,7 +6,7 @@ export const multipleDeploysForTheSameEnvironmentMockData: IRelease[] = [
     EnvironmentId: 'Environment-1',
     ReleasesId: 'Release-1',
     DeploymentId: 'Deployment-1',
-    DeployedAt: new Date(2020, 4, 28, 9),
+    DeployedAt: new Date(2020, 5, 15, 9),
   },
   {
     ProjectId: 'Project-1',

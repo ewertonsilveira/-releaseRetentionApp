@@ -1,11 +1,11 @@
-import RetentionRule from '../../src/retentionPolicies/RetentionRule';
+import Retention from '../../src/retentionPolicies/Retention';
 import { multipleDeploysOnSameDayMockData } from '../mock.data';
 
 describe('When project has few deployments on same environment for the same day', () => {
-  it('should sort by last 2 most recent deployments', () => {
-    const retentionRule = new RetentionRule(multipleDeploysOnSameDayMockData);
+  it('should sort by the last 2 most recent deployments', () => {
+    const retention = new Retention(multipleDeploysOnSameDayMockData);
 
-    const releases = retentionRule.releasesToKeep(
+    const releases = retention.applyKeepRule(
       'Project-1',
       'Environment-1',
       2,

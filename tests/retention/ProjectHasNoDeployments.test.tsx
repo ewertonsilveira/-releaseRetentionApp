@@ -1,11 +1,12 @@
-import RetentionRule from '../../src/retentionPolicies/RetentionRule';
-import { singleDeploymentMockData } from '../mock.data';
+import Retention from '../../src/retentionPolicies/Retention';
+import { multipleDeploysForTheSameEnvironmentMockData, singleDeploymentMockData } from '../mock.data';
 
-describe('When project has no releases for a specific environment', () => {
-  it('should return zero releases', () => {
-    const retentionRule = new RetentionRule(singleDeploymentMockData);
+describe('Retention policy', () => {
 
-    const releases = retentionRule.releasesToKeep(
+  it('When project has no deployments for a specific environment should return empty list', () => {
+    const retention = new Retention(singleDeploymentMockData);
+
+    const releases = retention.applyKeepRule(
       'Project-1',
       'Environment-1',
       1,
@@ -13,13 +14,28 @@ describe('When project has no releases for a specific environment', () => {
 
     expect(releases.length).toBe(0);
   });
+  
 });
 
-describe('When release has no deployments for that environment', () => {
-  it('should return zero releases', () => {
-    const releases = new RetentionRule([]).releasesToKeep(
+  it('When project has no releases should return empty list', () => {
+    const releases = new Retention([]).applyKeepRule(
       'Project-1',
       'Environment-1',
+      1,
+    );
+
+    expect(releases.length).toBe(0);
+});
+
+describe('When project has few deployments for the same environment', () => {
+  it('should return zero if environment does not match', () => {
+    const retention = new Retention(
+      multipleDeploysForTheSameEnvironmentMockData,
+    );
+
+    const releases = retention.applyKeepRule(
+      'Project-1',
+      'Environment-6',
       1,
     );
 
