@@ -11,6 +11,7 @@ Was built using the following tech and packages
 ## Assumptions and Additional Informations
 - I assumed we would have an API to fetch the deployment, project, etc data
 - I created the class to encapsulate the release data and the retention behaviour
+- I assmed the shape of the data to be flattened and denormalized 
 
 ### Run Tests
 

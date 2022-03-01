@@ -4,7 +4,7 @@ import { IRelease } from './IReleases.d';
  * Class to encapsulate and manipulate the releases retention rules
  */
 class RetentionRule {
-  releases: IRelease [];
+  releases: IRelease[];
 
   constructor(releasesData: IRelease[]) {
     this.releases = releasesData;
@@ -23,14 +23,19 @@ class RetentionRule {
     environmentId: string,
     keep: number,
   ): IRelease[] {
-
     if (!this.releases) return [];
 
-    const projects = this.releases.filter((r) => r.ProjectId === projectId && r.EnvironmentId === environmentId);
+    const projects = this.releases.filter(
+      (r) => r.ProjectId === projectId && r.EnvironmentId === environmentId,
+    );
 
-    if(!projects) return [];
+    if (!projects) return [];
 
-    return projects.slice(keep)
+    const projectsOrderedByDateAsc = projects.sort((a, b) =>
+      a.DeployedAt > b.DeployedAt ? -1 : 0,
+    );
+
+    return projectsOrderedByDateAsc.slice(0, keep);
   }
 }
 

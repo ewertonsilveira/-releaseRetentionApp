@@ -22,7 +22,7 @@
     "prebuild": "npm run lint",
     "build": "tsc -p tsconfig.release.json",
     "build:watch": "tsc -w -p tsconfig.release.json",
-    "format": "prettier --write src",
+    "format": "prettier --write src && prettier --write tests",
     "format:check": "prettier --check src",
     "lint": "eslint . --ext .ts,.tsx",
     "test": "jest --coverage",
