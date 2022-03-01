@@ -1,0 +1,11 @@
+*.scss
+*.json
+*.mdx
+*.html
+*.md
+*.jpg
+*.jpeg
+*.ico
+*.png
+*.gif
+public/**/**
