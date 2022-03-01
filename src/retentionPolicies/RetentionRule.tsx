@@ -1,9 +1,12 @@
-import { IReleases } from './IReleases.d';
+import { IRelease } from './IReleases.d';
 
+/**
+ * Class to encapsulate and manipulate the releases retention rules
+ */
 class RetentionRule {
-  releases: IReleases[];
+  releases: IRelease [];
 
-  constructor(releasesData: IReleases[]) {
+  constructor(releasesData: IRelease[]) {
     this.releases = releasesData;
   }
 
@@ -19,15 +22,15 @@ class RetentionRule {
     projectId: string,
     environmentId: string,
     keep: number,
-  ): IReleases[] {
-    if (this.releases)
-      return this.releases
-        .filter(
-          (r) => r.ProjectId === projectId && r.EnvironmentId == environmentId,
-        )
-        .slice(keep);
+  ): IRelease[] {
 
-    return [];
+    if (!this.releases) return [];
+
+    const projects = this.releases.filter((r) => r.ProjectId === projectId && r.EnvironmentId === environmentId);
+
+    if(!projects) return [];
+
+    return projects.slice(keep)
   }
 }
 

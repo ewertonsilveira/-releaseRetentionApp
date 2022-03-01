@@ -1,22 +1,22 @@
-# node-typescript-boilerplate
+# Tech
+Was built using the following tech and packages
+- `node =>14.17`
+- `Typescript 4.5`
+- `prettier`
+- `eslint`
+- `jest`
 
-[![TypeScript version][ts-badge]][typescript-4-5]
-[![Node.js version][nodejs-badge]][nodejs]
-[![APLv2][license-badge]][license]
 
 
-
-## Additional Informations
-
-### Why include Volta
-
-[Volta][volta]’s toolchain always keeps track of where you are, it makes sure the tools you use always respect the settings of the project you’re working on. This means you don’t have to worry about changing the state of your installed software when switching between projects. For example, it's [used by engineers at LinkedIn][volta-tomdale] to standardize tools and have reproducible development environments.
-
-I recommend to [install][volta-getting-started] Volta and use it to manage your project's toolchain.
+## Assumptions and Additional Informations
+- I assumed we would have an API to fetch the deployment, project, etc data
+- I created the class to encapsulate the release data and the retention behaviour
 
 ### Run Tests
 
-To run test, run the command line `yarn test`.
+To run test, run the command line `yarn test`. 
+
+To run test in watch mode, run the command line `yarn test:watch`. 
 
 
 ## License
