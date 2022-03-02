@@ -31,6 +31,8 @@
   "author": "Ewerton Silveira <ewertonsilveira@live.com>",
   "license": "Apache-2.0",
   "dependencies": {
+    "@types/lodash": "^4.14.179",
+    "lodash": "^4.17.21",
     "tslib": "~2.3.1"
   }
 }

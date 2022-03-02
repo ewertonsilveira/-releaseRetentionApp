@@ -1,54 +1,39 @@
+import { Logger } from '../../src/Logger/Logger';
 import Retention from '../../src/retentionPolicies/Retention';
 import { multipleDeploysForTheSameEnvironmentMockData } from '../mock.data';
 
-describe('When project has few deployments for the same environment', () => {
-  it('should return 2 releases to keep', () => {
-    const retention = new Retention(
-      multipleDeploysForTheSameEnvironmentMockData,
-    );
+jest.mock('../../src/Logger/Logger'); 
+const loggerMock = Logger as jest.MockedClass<typeof Logger>;
 
-    const releases = retention.applyKeepRule(
-      'Project-1',
-      'Environment-1',
-      2,
-    );
+describe('When a project has releases in 2 environments', () => {
 
-    expect(releases.length).toBe(2);
-    expect(releases[0].DeploymentId).toBe('Deployment-3');
-    expect(releases[1].DeploymentId).toBe('Deployment-2');
-  });
+    it('and was requested 2 release to keep than it should return 1 release for each environment', () => {
+        
+        const retention = new Retention(loggerMock.mock.instances[0], multipleDeploysForTheSameEnvironmentMockData);
 
-  it('should return 3 releases to keep', () => {
-    const retention = new Retention(
-      multipleDeploysForTheSameEnvironmentMockData,
-    );
+        const releases = retention.applyKeepRule(2);
 
-    const releases = retention.applyKeepRule(
-      'Project-1',
-      'Environment-1',
-      3,
-    );
+        expect(releases.length).toBe(3);
+        expect(releases[0].DeploymentId).toBe('Deployment-3');
+        expect(releases[1].DeploymentId).toBe('Deployment-2');
+        expect(releases[2].DeploymentId).toBe('Deployment-4');        
+    });
 
-    expect(releases.length).toBe(3);
-    expect(releases[0].DeploymentId).toBe('Deployment-3');
-    expect(releases[1].DeploymentId).toBe('Deployment-2');
-    expect(releases[2].DeploymentId).toBe('Deployment-1');
-  });
+    it('and was requested 1 release to keep than it should return 1 release for each environment', () => {
+        const retention = new Retention(loggerMock.mock.instances[0], multipleDeploysForTheSameEnvironmentMockData);
 
-  it('should return zero releases to keep', () => {
-    const retention = new Retention(
-      multipleDeploysForTheSameEnvironmentMockData,
-    );
+        const releases = retention.applyKeepRule(1);
 
-    const releases = retention.applyKeepRule(
-      'Project-1',
-      'Environment-1',
-      3,
-    );
+        expect(releases.length).toBe(2);
+        expect(releases[0].DeploymentId).toBe('Deployment-3');
+        expect(releases[1].DeploymentId).toBe('Deployment-4');  
+    });
 
-    expect(releases.length).toBe(3);
-    expect(releases[0].DeploymentId).toBe('Deployment-3');
-    expect(releases[1].DeploymentId).toBe('Deployment-2');
-    expect(releases[2].DeploymentId).toBe('Deployment-1');
-  });
+    it('request to delete all releases should return empty list', () => {
+        const retention = new Retention(loggerMock.mock.instances[0], multipleDeploysForTheSameEnvironmentMockData);
+
+        const releases = retention.applyKeepRule(0);
+
+        expect(releases.length).toBe(0);
+    });
 });

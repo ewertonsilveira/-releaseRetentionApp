@@ -1,21 +1,21 @@
+import { Logger } from '../../src/Logger/Logger';
 import Retention from '../../src/retentionPolicies/Retention';
 import { multipleDeploysOnSameDayMockData } from '../mock.data';
 
+jest.mock('../../src/Logger/Logger'); 
+const loggerMock = Logger as jest.MockedClass<typeof Logger>;
+
 describe('When project has few deployments on same environment for the same day', () => {
-  it('should sort by the last 2 most recent deployments', () => {
-    const retention = new Retention(multipleDeploysOnSameDayMockData);
+    it('should sort by the last 2 most recent deployments', () => {
+        const retention = new Retention(loggerMock.mock.instances[0], multipleDeploysOnSameDayMockData);
 
-    const releases = retention.applyKeepRule(
-      'Project-1',
-      'Environment-1',
-      2,
-    );
+        const releases = retention.applyKeepRule(2);
 
-    expect(releases.length).toBe(2);
-    expect(releases[0].DeploymentId).toBe('Deployment-4');
-    expect(releases[0].ReleasesId).toBe('Release-2');
+        expect(releases.length).toBe(2);
+        expect(releases[0].DeploymentId).toBe('Deployment-4');
+        expect(releases[0].ReleasesId).toBe('Release-2');
 
-    expect(releases[1].DeploymentId).toBe('Deployment-3');
-    expect(releases[1].ReleasesId).toBe('Release-1');
-  });
+        expect(releases[1].DeploymentId).toBe('Deployment-3');
+        expect(releases[1].ReleasesId).toBe('Release-1');
+    });
 });
