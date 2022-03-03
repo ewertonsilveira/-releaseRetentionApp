@@ -1,13 +1,10 @@
-import { Logger } from '../../src/Logger/Logger';
 import Retention from '../../src/retentionPolicies/Retention';
+import { LoggerMock } from '../logger/LoggerMock';
 import { multipleDeploysOnSameDayMockData } from '../mock.data';
 
-jest.mock('../../src/Logger/Logger'); 
-const loggerMock = Logger as jest.MockedClass<typeof Logger>;
-
-describe('When project has few deployments on same environment for the same day', () => {
+describe('When a project has multiple deployments for same environment on the same day', () => {
     it('should sort by the last 2 most recent deployments', () => {
-        const retention = new Retention(loggerMock.mock.instances[0], multipleDeploysOnSameDayMockData);
+        const retention = new Retention(new LoggerMock(true), multipleDeploysOnSameDayMockData);
 
         const releases = retention.applyKeepRule(2);
 

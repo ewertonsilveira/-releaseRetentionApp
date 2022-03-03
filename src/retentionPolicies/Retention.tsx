@@ -1,15 +1,15 @@
 import { IRelease } from './IReleases.d';
 import * as _ from 'lodash';
-import { ILogger } from '../Logger/ILogger';
+import { ILogger } from '../logger/ILogger';
 
 /**
  * Class to encapsulate and manipulate the releases retention rules
  */
-class Retention<T> {
-    logger: ILogger<T>;
+class Retention {
+    logger: ILogger;
     releases: IRelease[];
 
-    constructor(logger: ILogger<T>, releasesData: IRelease[]) {
+    constructor(logger: ILogger, releasesData: IRelease[]) {
         this.logger = logger;
         this.releases = releasesData;
     }
@@ -21,7 +21,6 @@ class Retention<T> {
      * @returns {IReleases[]}
      */
     applyKeepRule(keep: number): IRelease[] {
-
         if (!this.releases) return [];
 
         const orderedList = _.orderBy(
@@ -37,45 +36,44 @@ class Retention<T> {
 
         // Cleaning up everything, This biz logic should be well discussed before
         if (keep === 0) {
-          projectsToDelete = orderedList;
-          // TODO: Call separated service to delete all the releases all the customers?
-          return []; 
+            projectsToDelete = orderedList;
+            // TODO: Call separated service to delete all the releases all the customers?
+            return [];
         }
 
         // I prefered to loop it through manually, as I have more flexibility to avoid nested loops
         for (let i = 0; i < orderedList.length; i++) {
-          deployment = orderedList[i];
-          const nextItem = orderedList[i + 1];
-      
-          // increase the count for current project
-          ++deploymentCount;
-      
-          if (i === 0) {
-            projectsToKeep.push(deployment);
-            continue;
-          }
-          
-          // Keep deployment that are below the number to keep threshold
-          // Otherwise add them to delete list
-          deploymentCount <= keep ? projectsToKeep.push(deployment) : projectsToDelete.push(deployment);
-      
-          const resetCountForNextProject = nextItem && (deployment.ProjectId !== nextItem.ProjectId || deployment.EnvironmentId !== nextItem.EnvironmentId);
+            
+            // increase the count for current project
+            ++deploymentCount;
+            deployment = orderedList[i];
+            const nextItem = orderedList[i + 1];
 
-          deploymentCount = resetCountForNextProject ? 0 : deploymentCount; 
+            // Keep deployment that are below the number to keep threshold
+            // Otherwise add them to delete list
+            deploymentCount <= keep ? projectsToKeep.push(deployment) : projectsToDelete.push(deployment);
+
+            const resetCountForNextProject =
+                nextItem &&
+                (deployment.ProjectId !== nextItem.ProjectId || deployment.EnvironmentId !== nextItem.EnvironmentId);
+
+            deploymentCount = resetCountForNextProject ? 0 : deploymentCount;
         }
+
+        const reason = `These deployments were kept as part or retention policy run on ${new Date()}. Number of releases to Keep was ${keep}`
+        this.log(projectsToKeep,reason);
 
         return projectsToKeep;
     }
 
     /**
-     * Log the reason to keep the releases.
+     * Log the reason to keep the release.
      *
      * @param {number=} keep - A number releases to keep.
      * @returns {IReleases[]}
      */
-    log(releasesToKeep: T[], reason: string) {
-
-      this.logger.LogInfo(reason, releasesToKeep);
+    log<IRelease>(releasesToKeep: IRelease[], reason: string) {
+        _.forEach(releasesToKeep, (release) => this.logger.LogInfo(reason, release));
     }
 }
 
