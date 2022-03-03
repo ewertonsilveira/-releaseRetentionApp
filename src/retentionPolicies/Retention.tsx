@@ -42,7 +42,7 @@ class Retention {
         }
 
         // I prefered to loop it through manually, as I have more flexibility to avoid nested loops
-        for (let i = 0; i < orderedList.length; i++) {
+        for (let i = 0; i < orderedList.length; i++) { 
             
             // increase the count for current project
             ++deploymentCount;

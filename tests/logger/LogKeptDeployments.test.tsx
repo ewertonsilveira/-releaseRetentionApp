@@ -2,6 +2,7 @@ import { Logger } from '../../src/logger/Logger';
 import { twoDeploymentForDifferentEnvironmentsMockData } from '../mock.data';
 
 describe('Logger component', () => {
+    
     it('should log reason for deployment', () => {
         const logger = new Logger();
 
